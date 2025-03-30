@@ -1,0 +1,74 @@
+{
+    "folders": [
+        {
+            "name": "Development",
+            "path": ".."
+        }
+    ],
+    "settings": {
+        "git.autoRepositoryDetection": "subFolders",
+        "git.enabled": true,
+        "git.autofetch": true,
+        "git.allowCancellation": true,
+        "git.confirmSync": false,
+        "git.openDiffOnClick": false,
+        "git.showPushSuccessNotification": true,
+        "git.suggestSmartCommit": true,
+        "files.exclude": {
+            "**/.git": true,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/CVS": true,
+            "**/.DS_Store": true,
+            "**/Thumbs.db": true,
+            "**/node_modules": true,
+            "**/bower_components": true,
+            "**/dist": true,
+            "**/coverage": true,
+            "**/.next": true,
+            "**/.nuxt": true,
+            "**/.idea": true,
+            "**/.vscode": true
+        },
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit"
+        },
+        "files.autoSave": "afterDelay",
+        "files.autoSaveDelay": 1000,
+        "editor.rulers": [80, 100],
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+        "files.encoding": "utf8",
+        "files.eol": "\n",
+        "files.associations": {
+            "*.h": "c",
+            "*.c": "c",
+            "*.cpp": "cpp",
+            "*.hpp": "cpp",
+            "*.py": "python",
+            "*.js": "javascript",
+            "*.ts": "typescript",
+            "*.json": "json",
+            "*.md": "markdown",
+            "*.sh": "shellscript",
+            "*.yml": "yaml",
+            "*.yaml": "yaml"
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-vscode.cpptools",
+            "dbaeumer.vscode-eslint",
+            "esbenp.prettier-vscode",
+            "eamodio.gitlens",
+            "streetsidesoftware.code-spell-checker",
+            "yzhang.markdown-all-in-one",
+            "ms-vscode-remote.remote-containers"
+        ]
+    }
+} 
