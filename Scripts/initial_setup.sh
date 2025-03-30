@@ -79,6 +79,19 @@ mkdir -p ~/Library/Mobile\ Documents/com~apple~CloudDocs/Development/Workspaces
 print_status "Authenticating with GitHub..."
 gh auth login
 
+# Initialize Git repository if not already initialized
+if [ ! -d .git ]; then
+    print_status "Initializing Git repository..."
+    git init
+    git add .
+    git commit -m "Initial commit"
+fi
+
+# Initialize and update submodules
+print_status "Initializing submodules..."
+git submodule init
+git submodule update --recursive
+
 # Verify installations
 print_status "Verifying installations..."
 echo "Checking Homebrew..."
@@ -99,5 +112,4 @@ node --version
 echo "Checking Docker..."
 docker --version
 
-print_status "Initial setup complete!"
-print_warning "Please follow the instructions in SETUP_GUIDE.md for the next steps."
+print_status "Setup complete! You can now run ./Scripts/setup_workspace.sh to open the workspace in Cursor."
