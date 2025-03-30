@@ -1,0 +1,6 @@
+[submodule "Projects/cve_config_generation"]
+	path = Projects/cve_config_generation
+	url = https://github.com/robbedell/cve_config_generation.git
+[submodule "Projects/palo_alto_poc"]
+	path = Projects/palo_alto_poc
+	url = https://github.com/robbedell/palo_alto_poc.git
