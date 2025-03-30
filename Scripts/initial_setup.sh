@@ -3,6 +3,11 @@
 # Exit on error
 set -e
 
+# Load environment variables
+if [ -f GitHub/.env ]; then
+    source GitHub/.env
+fi
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -70,14 +75,19 @@ fi
 
 # Create development directory structure
 print_status "Creating development directory structure..."
-mkdir -p ~/Library/Mobile\ Documents/com~apple~CloudDocs/Development/Projects
+mkdir -p ~/Library/Mobile\ Documents/com~apple~CloudDocs/Development/GitHub
 mkdir -p ~/Library/Mobile\ Documents/com~apple~CloudDocs/Development/Scripts
 mkdir -p ~/Library/Mobile\ Documents/com~apple~CloudDocs/Development/Configs
 mkdir -p ~/Library/Mobile\ Documents/com~apple~CloudDocs/Development/Workspaces
 
 # Authenticate with GitHub
 print_status "Authenticating with GitHub..."
-gh auth login
+if [ -n "$GITHUB_TOKEN" ]; then
+    print_status "Using GitHub token for authentication..."
+    gh auth login --with-token <<< "$GITHUB_TOKEN"
+else
+    gh auth login
+fi
 
 # Initialize Git repository if not already initialized
 if [ ! -d .git ]; then
@@ -89,6 +99,10 @@ fi
 
 # Initialize and update submodules
 print_status "Initializing submodules..."
+if [ -n "$GITHUB_TOKEN" ]; then
+    print_status "Using GitHub token for submodules..."
+    git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+fi
 git submodule init
 git submodule update --recursive
 
