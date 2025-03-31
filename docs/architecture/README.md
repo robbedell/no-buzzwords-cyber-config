@@ -1,154 +1,260 @@
 # Architecture Overview
 
+The Security Configuration Platform is built with a modern, scalable architecture that follows best practices for security and performance.
+
 ## System Architecture
 
-The Security Configuration Platform is built using a modern microservices architecture with the following key components:
+```mermaid
+graph TD
+    subgraph Frontend
+        A[Next.js App] --> B[React Components]
+        B --> C[State Management]
+        B --> D[API Client]
+    end
 
-### Frontend (Next.js)
+    subgraph Backend
+        E[Express Server] --> F[Authentication]
+        E --> G[API Routes]
+        E --> H[Policy Engine]
+        H --> I[Rule Validator]
+        H --> J[Compliance Checker]
+        E --> K[Security Scanner]
+        K --> L[CVE Database]
+        E --> M[Cache Layer]
+    end
 
-- **Framework**: Next.js with TypeScript
-- **State Management**: React Query
-- **Styling**: TailwindCSS
-- **Testing**: Jest + React Testing Library
+    subgraph Data Layer
+        N[(PostgreSQL)] --> O[Data Models]
+        P[(Redis Cache)] --> Q[Session Store]
+        P --> R[Rate Limiter]
+    end
 
-### Backend (Express.js)
+    A --> E
+    D --> E
+    E --> N
+    E --> P
+```
 
-- **Framework**: Express.js with TypeScript
-- **Database**: PostgreSQL
-- **Caching**: Redis
-- **Authentication**: JWT
-- **API Documentation**: OpenAPI/Swagger
-
-### Infrastructure
-
-- **Containerization**: Docker
-- **Orchestration**: Docker Compose
-- **CI/CD**: GitHub Actions
-
-## Component Details
+## Component Overview
 
 ### Frontend Architecture
 
+```mermaid
+graph LR
+    A[Pages] --> B[Components]
+    B --> C[Hooks]
+    B --> D[Context]
+    C --> E[API Client]
+    D --> E
+    E --> F[WebSocket]
 ```
-src/frontend/
-├── components/          # Reusable UI components
-├── pages/              # Next.js pages and routing
-├── styles/             # Global styles and Tailwind config
-└── utils/              # Utility functions and hooks
-```
+
+The frontend is built with Next.js and follows a component-based architecture:
+
+- **Pages**: Server-side rendered routes
+- **Components**: Reusable UI components
+- **Hooks**: Custom React hooks for business logic
+- **Context**: Global state management
+- **API Client**: TypeScript-based API client
+- **WebSocket**: Real-time updates
 
 ### Backend Architecture
 
+```mermaid
+graph TD
+    A[API Layer] --> B[Service Layer]
+    B --> C[Data Layer]
+    B --> D[Security Layer]
+    D --> E[Authentication]
+    D --> F[Authorization]
+    D --> G[Rate Limiting]
+    B --> H[Policy Engine]
+    H --> I[Rule Engine]
+    H --> J[Compliance Engine]
 ```
-src/backend/
-├── controllers/        # Request handlers
-├── models/            # Database models
-├── routes/            # API routes
-├── services/          # Business logic
-└── utils/             # Utility functions
+
+The backend is built with Node.js and Express:
+
+- **API Layer**: RESTful endpoints and WebSocket handlers
+- **Service Layer**: Business logic and orchestration
+- **Data Layer**: Database interactions and caching
+- **Security Layer**: Authentication, authorization, and rate limiting
+- **Policy Engine**: Security policy management and validation
+
+### Data Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant Database
+    participant Cache
+    participant Security
+
+    User->>Frontend: Request
+    Frontend->>Backend: API Call
+    Backend->>Cache: Check Cache
+    alt Cache Hit
+        Cache-->>Backend: Return Data
+    else Cache Miss
+        Backend->>Database: Query
+        Database-->>Backend: Return Data
+        Backend->>Cache: Update Cache
+    end
+    Backend->>Security: Validate
+    Security-->>Backend: Approved
+    Backend-->>Frontend: Response
+    Frontend-->>User: Display
 ```
-
-## Data Flow
-
-1. **User Interface**
-
-   - Users interact with the frontend application
-   - Frontend makes API calls to backend services
-
-2. **API Layer**
-
-   - Backend controllers handle requests
-   - Request validation and authentication
-   - Route to appropriate services
-
-3. **Business Logic**
-
-   - Services implement core functionality
-   - Handle data processing and validation
-   - Interact with external APIs (CVE data)
-
-4. **Data Layer**
-   - Models define data structure
-   - Database operations
-   - Caching layer for performance
 
 ## Security Architecture
 
-### Authentication
+```mermaid
+graph TD
+    A[Client] -->|HTTPS| B[Load Balancer]
+    B -->|JWT| C[API Gateway]
+    C -->|Internal| D[Service Layer]
+    D -->|Encrypted| E[Database]
+    D -->|Encrypted| F[Cache]
+    D -->|Secure| G[Security Scanner]
+    G -->|Updates| H[CVE Database]
+```
 
-- JWT-based authentication
-- Role-based access control
-- Token refresh mechanism
+### Security Features
 
-### Data Security
+1. **Authentication**
 
-- Input validation
-- SQL injection prevention
-- XSS protection
-- CSRF protection
+   - JWT-based authentication
+   - OAuth2 support
+   - 2FA capability
 
-### API Security
+2. **Authorization**
 
-- Rate limiting
-- Request validation
-- API key management
-- HTTPS enforcement
+   - Role-based access control
+   - Resource-based permissions
+   - API key management
+
+3. **Data Protection**
+
+   - Encryption at rest
+   - Encryption in transit
+   - Secure key management
+
+4. **Monitoring**
+   - Audit logging
+   - Security alerts
+   - Performance metrics
 
 ## Deployment Architecture
 
-### Development Environment
+```mermaid
+graph TD
+    A[GitHub] -->|Push| B[GitHub Actions]
+    B -->|Test| C[Test Environment]
+    B -->|Deploy| D[Production]
+    D --> E[Load Balancer]
+    E --> F[Frontend Cluster]
+    E --> G[Backend Cluster]
+    F --> H[CDN]
+    G --> I[Database Cluster]
+    G --> J[Cache Cluster]
+```
 
-- Local development with Docker Compose
-- Hot-reloading for both frontend and backend
-- Local database and Redis instances
+### Deployment Components
 
-### Production Environment
+1. **CI/CD Pipeline**
 
-- Containerized deployment
-- Load balancing
-- Database replication
-- Redis cluster
-- CDN for static assets
+   - Automated testing
+   - Security scanning
+   - Deployment automation
 
-## Monitoring and Logging
+2. **Infrastructure**
 
-### Application Monitoring
+   - Container orchestration
+   - Load balancing
+   - Auto-scaling
 
-- Performance metrics
-- Error tracking
-- User analytics
+3. **Monitoring**
+   - Health checks
+   - Performance monitoring
+   - Error tracking
 
-### Infrastructure Monitoring
+## Scalability
 
-- Container health
-- Resource utilization
-- Network metrics
+The platform is designed to scale horizontally:
 
-### Logging
+1. **Frontend Scaling**
 
-- Centralized logging
-- Log aggregation
-- Error tracking
-- Audit logging
+   - CDN distribution
+   - Static asset caching
+   - Client-side caching
 
-## Future Considerations
+2. **Backend Scaling**
 
-### Scalability
+   - Load balancing
+   - Service replication
+   - Database sharding
 
-- Horizontal scaling
-- Database sharding
-- Caching strategies
-- Load balancing
+3. **Data Layer Scaling**
+   - Read replicas
+   - Cache distribution
+   - Connection pooling
 
-### Integration
+## Performance Optimization
 
-- Additional vendor support
-- API integrations
-- Third-party services
+1. **Caching Strategy**
 
-### Features
+   - Redis caching
+   - Browser caching
+   - CDN caching
 
-- Real-time updates
-- Advanced analytics
-- Machine learning integration
-- Automated testing
+2. **Database Optimization**
+
+   - Index optimization
+   - Query optimization
+   - Connection pooling
+
+3. **Frontend Optimization**
+   - Code splitting
+   - Lazy loading
+   - Asset optimization
+
+## Monitoring and Observability
+
+```mermaid
+graph LR
+    A[Application] -->|Metrics| B[Prometheus]
+    A -->|Logs| C[ELK Stack]
+    A -->|Traces| D[Jaeger]
+    B --> E[Grafana]
+    C --> E
+    D --> E
+```
+
+### Monitoring Components
+
+1. **Metrics**
+
+   - Application metrics
+   - System metrics
+   - Business metrics
+
+2. **Logging**
+
+   - Structured logging
+   - Log aggregation
+   - Log analysis
+
+3. **Tracing**
+   - Distributed tracing
+   - Performance profiling
+   - Error tracking
+
+---
+
+<div class="card">
+  <h3>🔍 Want to Learn More?</h3>
+  <p>Explore our detailed component documentation and API reference.</p>
+  <a href="#/api" class="button">View API Reference</a>
+</div>
