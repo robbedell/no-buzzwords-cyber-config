@@ -1,9 +1,3 @@
-[submodule "GitHub/cve_config_generation"]
-	path = GitHub/cve_config_generation
-	url = https://github.com/robbedell/cve_config_generation.git
-[submodule "GitHub/palo_alto_poc"]
-	path = GitHub/palo_alto_poc
-	url = https://github.com/robbedell/palo_alto_poc.git
-[submodule "GitHub/security-config-platform"]
-	path = GitHub/security-config-platform
-	url = https://github.com/robbedell/security-config-platform.git
+[submodule "GitHub/no-buzzwords-cyber-config"]
+	path = GitHub/no-buzzwords-cyber-config
+	url = https://github.com/robbedell/no-buzzwords-cyber-config.git

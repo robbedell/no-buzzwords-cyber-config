@@ -1,0 +1,93 @@
+name: Label Sync
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/project-board.md"
+  workflow_dispatch:
+
+jobs:
+  sync-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Sync Labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = {
+              // Type labels
+              bug: { color: 'd73a4a', description: 'Bug fixes and issues' },
+              enhancement: { color: 'a2eeef', description: 'New features and improvements' },
+              documentation: { color: '0075ca', description: 'Documentation updates' },
+              security: { color: 'ee0701', description: 'Security-related changes' },
+              performance: { color: '0e8a16', description: 'Performance optimizations' },
+
+              // Priority labels
+              'priority:high': { color: 'ee0701', description: 'Critical issues' },
+              'priority:medium': { color: 'fbca04', description: 'Important but not urgent' },
+              'priority:low': { color: '0e8a16', description: 'Nice to have' },
+
+              // Size labels
+              'size:XS': { color: '0e8a16', description: 'Quick fixes (< 1 hour)' },
+              'size:S': { color: '0e8a16', description: 'Small changes (1-2 hours)' },
+              'size:M': { color: 'fbca04', description: 'Medium tasks (2-4 hours)' },
+              'size:L': { color: 'd73a4a', description: 'Large features (4-8 hours)' },
+              'size:XL': { color: 'ee0701', description: 'Epic tasks (> 8 hours)' },
+
+              // Status labels
+              'status:blocked': { color: 'ee0701', description: 'Blocked by other issues' },
+              'status:needs-info': { color: 'fbca04', description: 'Requires more information' },
+              'status:ready': { color: '0e8a16', description: 'Ready for implementation' },
+              'status:in-progress': { color: '0052cc', description: 'Currently being worked on' },
+              'status:review': { color: 'fbca04', description: 'Under review' },
+              'status:done': { color: '0e8a16', description: 'Completed' }
+            };
+
+            // Get existing labels
+            const existingLabels = await github.rest.issues.listLabelsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            // Create or update labels
+            for (const [name, config] of Object.entries(labels)) {
+              const existingLabel = existingLabels.data.find(l => l.name === name);
+
+              if (existingLabel) {
+                // Update existing label if needed
+                if (existingLabel.color !== config.color || existingLabel.description !== config.description) {
+                  await github.rest.issues.updateLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: name,
+                    color: config.color,
+                    description: config.description
+                  });
+                }
+              } else {
+                // Create new label
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: name,
+                  color: config.color,
+                  description: config.description
+                });
+              }
+            }
+
+            // Remove labels that are no longer defined
+            for (const existingLabel of existingLabels.data) {
+              if (!labels[existingLabel.name]) {
+                await github.rest.issues.deleteLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: existingLabel.name
+                });
+              }
+            }

@@ -1,0 +1,124 @@
+name: Project Board Sync
+
+on:
+  issues:
+    types: [opened, closed, reopened, labeled, unlabeled]
+  pull_request:
+    types: [opened, closed, reopened, labeled, unlabeled]
+
+jobs:
+  sync-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync Project Board
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const projectName = 'Security Configuration Platform';
+            const projectNumber = 1; // Update this with your project number
+
+            // Get the project
+            const project = await github.graphql(`
+              query {
+                organization(login: "robbedell") {
+                  projectV2(number: ${projectNumber}) {
+                    id
+                    title
+                    items(first: 100) {
+                      nodes {
+                        id
+                        content {
+                          ... on Issue {
+                            id
+                            number
+                            title
+                            state
+                            labels(first: 10) {
+                              nodes {
+                                name
+                              }
+                            }
+                          }
+                          ... on PullRequest {
+                            id
+                            number
+                            title
+                            state
+                            labels(first: 10) {
+                              nodes {
+                                name
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `);
+
+            // Get the current item
+            const item = context.payload.issue || context.payload.pull_request;
+            const itemType = context.payload.issue ? 'Issue' : 'PullRequest';
+            const itemId = item.node_id;
+
+            // Check if item is already in project
+            const isInProject = project.organization.projectV2.items.nodes.some(
+              node => node.content.id === itemId
+            );
+
+            if (!isInProject) {
+              // Add item to project
+              await github.graphql(`
+                mutation {
+                  addProjectV2ItemById(input: {
+                    projectId: "${project.organization.projectV2.id}",
+                    contentId: "${itemId}"
+                  }) {
+                    item {
+                      id
+                    }
+                  }
+                }
+              `);
+            }
+
+            // Update item status based on state
+            if (item.state === 'closed') {
+              // Move to "Done" column
+              await github.graphql(`
+                mutation {
+                  updateProjectV2ItemFieldValue(input: {
+                    projectId: "${project.organization.projectV2.id}",
+                    itemId: "${itemId}",
+                    fieldId: "Status",
+                    value: {
+                      singleSelectOptionId: "Done"
+                    }
+                  }) {
+                    projectV2Item {
+                      id
+                    }
+                  }
+                }
+              `);
+            } else {
+              // Move to "In Progress" column
+              await github.graphql(`
+                mutation {
+                  updateProjectV2ItemFieldValue(input: {
+                    projectId: "${project.organization.projectV2.id}",
+                    itemId: "${itemId}",
+                    fieldId: "Status",
+                    value: {
+                      singleSelectOptionId: "In Progress"
+                    }
+                  }) {
+                    projectV2Item {
+                      id
+                    }
+                  }
+                }
+              `);
+            }
