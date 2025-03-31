@@ -1,37 +1,13 @@
-# Build stage
-FROM node:18-alpine AS builder
+FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci
+RUN npm install
 
-# Copy source code
 COPY . .
 
-# Build TypeScript
-RUN npm run build
+EXPOSE 3001
 
-# Production stage
-FROM node:18-alpine AS runner
-
-WORKDIR /app
-
-# Set environment variables
-ENV NODE_ENV=production
-
-# Copy package files and install production dependencies
-COPY package*.json ./
-RUN npm ci --only=production
-
-# Copy built files from builder
-COPY --from=builder /app/dist ./dist
-
-# Expose port
-EXPOSE 4000
-
-# Start the application
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

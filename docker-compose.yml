@@ -3,12 +3,12 @@ version: "3.8"
 services:
   frontend:
     build:
-      context: ./frontend
+      context: ./src/frontend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend:/app
+      - ./src/frontend:/app
       - /app/node_modules
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:3001
@@ -18,12 +18,12 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: ./src/backend
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
     volumes:
-      - ./backend:/app
+      - ./src/backend:/app
       - /app/node_modules
     environment:
       - PORT=3001
