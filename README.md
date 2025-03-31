@@ -1,13 +1,9 @@
-# Security Configuration Platform
+# Development Projects
 
-A unified platform for security configuration management and CVE-based configuration generation. This platform helps security teams manage, validate, and generate security configurations across different vendors while incorporating CVE data for enhanced security.
-
-## Project Status
-
-[![Project Board](https://img.shields.io/badge/Project%20Board-View%20Status-blue)](https://github.com/robbedell/security-config-platform/projects/1)
-[![Issues](https://img.shields.io/github/issues/robbedell/security-config-platform)](https://github.com/robbedell/security-config-platform/issues)
-[![Pull Requests](https://img.shields.io/github/issues-pr/robbedell/security-config-platform)](https://github.com/robbedell/security-config-platform/pulls)
-[![Documentation](https://img.shields.io/badge/Documentation-View%20Docs-green)](https://robbedell.github.io/security-config-platform)
+[![Project Board](https://img.shields.io/badge/Project%20Board-View%20Status-blue)](https://github.com/robbedell/no-buzzwords-cyber-config/projects/1)
+[![Issues](https://img.shields.io/github/issues/robbedell/no-buzzwords-cyber-config)](https://github.com/robbedell/no-buzzwords-cyber-config/issues)
+[![Pull Requests](https://img.shields.io/github/issues-pr/robbedell/no-buzzwords-cyber-config)](https://github.com/robbedell/no-buzzwords-cyber-config/pulls)
+[![Documentation](https://img.shields.io/badge/Documentation-View%20Docs-green)](https://robbedell.github.io/no-buzzwords-cyber-config)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ## Features
@@ -26,7 +22,7 @@ A unified platform for security configuration management and CVE-based configura
 ## Project Structure
 
 ```
-security-config-platform/
+no-buzzwords-cyber-config/
 ├── config/                    # Configuration files
 │   ├── development/          # Development environment configs
 │   └── production/           # Production environment configs
@@ -83,7 +79,7 @@ We use GitHub Projects to track the development of this platform. The project bo
 - Milestone tracking
 - Automated status updates
 
-Visit our [Project Board](https://github.com/robbedell/security-config-platform/projects/1) to:
+Visit our [Project Board](https://github.com/robbedell/no-buzzwords-cyber-config/projects/1) to:
 
 - View current development status
 - Track upcoming features
@@ -104,8 +100,8 @@ Visit our [Project Board](https://github.com/robbedell/security-config-platform/
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/robbedell/security-config-platform.git
-   cd security-config-platform
+   git clone https://github.com/robbedell/no-buzzwords-cyber-config.git
+   cd no-buzzwords-cyber-config
    ```
 
 2. Set up environment variables:
@@ -295,9 +291,9 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 
 ## Support
 
-- [Documentation](https://robbedell.github.io/security-config-platform)
-- [Issue Tracker](https://github.com/robbedell/security-config-platform/issues)
-- [Discussions](https://github.com/robbedell/security-config-platform/discussions)
+- [Documentation](https://robbedell.github.io/no-buzzwords-cyber-config)
+- [Issue Tracker](https://github.com/robbedell/no-buzzwords-cyber-config/issues)
+- [Discussions](https://github.com/robbedell/no-buzzwords-cyber-config/discussions)
 
 ## License
 

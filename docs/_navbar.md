@@ -1,5 +1,0 @@
-- [GitHub](https://github.com/robbedell/security-config-platform)
-- [Project Board](https://github.com/robbedell/security-config-platform/projects/1)
-- [API Docs](https://robbedell.github.io/security-config-platform/api-docs)
-- [Issues](https://github.com/robbedell/security-config-platform/issues)
-- [Pull Requests](https://github.com/robbedell/security-config-platform/pulls)

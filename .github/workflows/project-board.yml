@@ -13,7 +13,7 @@ jobs:
       - name: Add to Project Board
         uses: actions/add-to-project@v0.5.0
         with:
-          project-url: https://github.com/robbedell/security-config-platform/projects/1
+          project-url: https://github.com/robbedell/no-buzzwords-cyber-config/projects/1
           github-token: ${{ secrets.GITHUB_TOKEN }}
           operation: add
           issue: ${{ github.event.issue || github.event.pull_request }}
@@ -23,7 +23,7 @@ jobs:
         if: github.event.action == 'opened' && github.event.pull_request
         uses: actions/add-to-project@v0.5.0
         with:
-          project-url: https://github.com/robbedell/security-config-platform/projects/1
+          project-url: https://github.com/robbedell/no-buzzwords-cyber-config/projects/1
           github-token: ${{ secrets.GITHUB_TOKEN }}
           operation: move
           issue: ${{ github.event.pull_request }}
@@ -33,7 +33,7 @@ jobs:
         if: github.event.action == 'opened' && github.event.pull_request
         uses: actions/add-to-project@v0.5.0
         with:
-          project-url: https://github.com/robbedell/security-config-platform/projects/1
+          project-url: https://github.com/robbedell/no-buzzwords-cyber-config/projects/1
           github-token: ${{ secrets.GITHUB_TOKEN }}
           operation: move
           issue: ${{ github.event.pull_request }}
@@ -43,7 +43,7 @@ jobs:
         if: github.event.action == 'closed'
         uses: actions/add-to-project@v0.5.0
         with:
-          project-url: https://github.com/robbedell/security-config-platform/projects/1
+          project-url: https://github.com/robbedell/no-buzzwords-cyber-config/projects/1
           github-token: ${{ secrets.GITHUB_TOKEN }}
           operation: move
           issue: ${{ github.event.issue || github.event.pull_request }}
@@ -53,7 +53,14 @@ jobs:
         if: github.event.action == 'closed'
         uses: actions/add-to-project@v0.5.0
         with:
-          project-url: https://github.com/robbedell/security-config-platform/projects/1
+          project-url: https://github.com/robbedell/no-buzzwords-cyber-config/projects/1
           github-token: ${{ secrets.GITHUB_TOKEN }}
           operation: remove
           issue: ${{ github.event.issue || github.event.pull_request }}
+
+      - name: Update Project Board
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const projectUrl = 'https://github.com/robbedell/no-buzzwords-cyber-config/projects/1';
+            // ... existing code ...

@@ -4,7 +4,7 @@ This directory contains GitHub Projects configuration and documentation for the 
 
 ## Project Board
 
-The main project board is located at: [Security Config Platform Project Board](https://github.com/robbedell/security-config-platform/projects/1)
+The main project board is located at: [No Buzzwords Cyber Config Project Board](https://github.com/robbedell/no-buzzwords-cyber-config/projects/1)
 
 ### Board Structure
 
