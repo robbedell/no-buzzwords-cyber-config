@@ -1,0 +1,59 @@
+name: Project Board Automation
+
+on:
+  issues:
+    types: [opened, labeled, unlabeled, closed, reopened]
+  pull_request:
+    types: [opened, closed, reopened]
+
+jobs:
+  update-project-board:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add to Project Board
+        uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: https://github.com/robbedell/security-config-platform/projects/1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          operation: add
+          issue: ${{ github.event.issue || github.event.pull_request }}
+          column: "To Do"
+
+      - name: Move to In Progress
+        if: github.event.action == 'opened' && github.event.pull_request
+        uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: https://github.com/robbedell/security-config-platform/projects/1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          operation: move
+          issue: ${{ github.event.pull_request }}
+          column: "In Progress"
+
+      - name: Move to In Review
+        if: github.event.action == 'opened' && github.event.pull_request
+        uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: https://github.com/robbedell/security-config-platform/projects/1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          operation: move
+          issue: ${{ github.event.pull_request }}
+          column: "In Review"
+
+      - name: Move to Done
+        if: github.event.action == 'closed'
+        uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: https://github.com/robbedell/security-config-platform/projects/1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          operation: move
+          issue: ${{ github.event.issue || github.event.pull_request }}
+          column: "Done"
+
+      - name: Remove from Project Board
+        if: github.event.action == 'closed'
+        uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: https://github.com/robbedell/security-config-platform/projects/1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          operation: remove
+          issue: ${{ github.event.issue || github.event.pull_request }}

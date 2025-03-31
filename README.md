@@ -1,143 +1,310 @@
-# Development Workspace
+# Security Configuration Platform
 
-This repository contains my development workspace configuration, including scripts, settings, and project repositories. This workspace is designed to be easily set up on any macOS machine with iCloud Drive enabled.
+A unified platform for security configuration management and CVE-based configuration generation. This platform helps security teams manage, validate, and generate security configurations across different vendors while incorporating CVE data for enhanced security.
 
-## Projects
+## Project Status
 
-This workspace contains the following projects as Git submodules:
+[![Project Board](https://img.shields.io/badge/Project%20Board-View%20Status-blue)](https://github.com/robbedell/security-config-platform/projects/1)
+[![Issues](https://img.shields.io/github/issues/robbedell/security-config-platform)](https://github.com/robbedell/security-config-platform/issues)
+[![Pull Requests](https://img.shields.io/github/issues-pr/robbedell/security-config-platform)](https://github.com/robbedell/security-config-platform/pulls)
+[![Documentation](https://img.shields.io/badge/Documentation-View%20Docs-green)](https://robbedell.github.io/security-config-platform)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-- [cve_config_generation](GitHub/cve_config_generation)
-- [palo_alto_poc](GitHub/palo_alto_poc)
+## Features
+
+- **CVE Integration**: Real-time CVE data integration for security configuration validation
+- **Multi-Vendor Support**: Configuration generation for multiple security vendors
+- **Validation Rules**: Automated validation of security configurations
+- **Version Control**: Track and manage configuration changes
+- **API Integration**: RESTful API for programmatic access
+- **User Management**: Role-based access control and user management
+- **Real-time Updates**: WebSocket support for live configuration updates
+- **Audit Logging**: Comprehensive audit trail for all changes
+- **Compliance Checking**: Automated compliance validation against security standards
+- **Configuration Templates**: Pre-built templates for common security configurations
+
+## Project Structure
+
+```
+security-config-platform/
+├── config/                    # Configuration files
+│   ├── development/          # Development environment configs
+│   └── production/           # Production environment configs
+├── docker/                   # Docker-related files
+│   ├── backend/             # Backend Docker configuration
+│   ├── frontend/            # Frontend Docker configuration
+│   └── docker-compose.yml   # Main Docker Compose file
+├── docs/                     # Documentation
+│   ├── architecture/        # Architecture documentation
+│   │   ├── README.md       # Architecture overview
+│   │   ├── frontend.md     # Frontend architecture
+│   │   ├── backend.md      # Backend architecture
+│   │   └── security.md     # Security architecture
+│   ├── api/                # API documentation
+│   │   ├── README.md      # API overview
+│   │   └── endpoints.md   # API endpoints
+│   └── development/       # Development guides
+│       ├── README.md     # Development overview
+│       ├── setup.md      # Setup guide
+│       └── guidelines.md # Development guidelines
+├── src/                      # Source code
+│   ├── backend/            # Backend application
+│   │   ├── package.json
+│   │   └── src/
+│   │       ├── controllers/
+│   │       ├── models/
+│   │       ├── routes/
+│   │       ├── services/
+│   │       └── utils/
+│   └── frontend/           # Frontend application
+│       ├── package.json
+│       └── src/
+│           ├── components/
+│           ├── pages/
+│           ├── styles/
+│           └── utils/
+├── .github/                 # GitHub configuration
+│   ├── ISSUE_TEMPLATE/     # Issue templates
+│   ├── projects/           # Project board configuration
+│   ├── workflows/          # GitHub Actions workflows
+│   └── PULL_REQUEST_TEMPLATE.md
+├── .gitignore
+├── LICENSE
+└── README.md
+```
+
+## Project Management
+
+We use GitHub Projects to track the development of this platform. The project board provides:
+
+- Kanban-style task tracking
+- Sprint planning and management
+- Issue and PR organization
+- Milestone tracking
+- Automated status updates
+
+Visit our [Project Board](https://github.com/robbedell/security-config-platform/projects/1) to:
+
+- View current development status
+- Track upcoming features
+- Monitor bug fixes
+- Follow project milestones
 
 ## Prerequisites
 
-Before starting the setup process, ensure you have:
+- Node.js 18.x or later
+- Docker and Docker Compose
+- PostgreSQL 15.x
+- Redis 7.x
+- Git
+- Make (optional, for using Makefile commands)
 
-- macOS installed
-- iCloud Drive enabled
-- Apple ID configured
-- Terminal access
-- GitHub account with SSH key access
-- GitHub Personal Access Token (PAT) with `repo` and `workflow` scopes
+## Getting Started
 
-## Setup Process
+1. Clone the repository:
 
-### Step 1: Generate GitHub Personal Access Token
+   ```bash
+   git clone https://github.com/robbedell/security-config-platform.git
+   cd security-config-platform
+   ```
 
-1. Go to GitHub Settings → Developer Settings → Personal Access Tokens → Tokens (classic)
-2. Click "Generate new token (classic)"
-3. Set a descriptive name (e.g., "Development Workspace")
-4. Set expiration (recommended: 90 days)
-5. Select scopes:
-   - `repo` (all repo permissions)
-   - `workflow` (for GitHub Actions)
-6. Copy the generated token
+2. Set up environment variables:
 
-### Step 2: Configure Environment
+   ```bash
+   # Copy example environment files
+   cp config/development/.env.example config/development/.env
+   cp config/production/.env.example config/production/.env
+   ```
 
-1. Create a `.env` file in the GitHub directory:
+3. Start the development environment:
 
-```bash
-cp GitHub/.env.example GitHub/.env
-```
+   ```bash
+   # Using Docker Compose
+   cd docker
+   docker-compose up -d
 
-2. Edit `GitHub/.env` and add your GitHub token:
+   # Or using Make (if available)
+   make dev-up
+   ```
 
-```
-GITHUB_TOKEN=your_token_here
-```
+4. Access the application:
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:3001
+   - API Documentation: http://localhost:3001/api-docs
+   - Documentation Site: http://localhost:3000/docs
 
-### Step 3: Clone the Repository
+## Development
 
-First, clone this repository with the `--recursive` flag to include all submodules:
+### Frontend Development
 
-```bash
-git clone --recursive https://github.com/robbedell/development.git ~/Library/Mobile\ Documents/com~apple~CloudDocs/Development
-```
-
-### Step 4: Initial Setup
-
-Run the initial setup script to:
-
-- Install required software (Homebrew, Cursor, Git, Python, Node.js, Docker)
-- Configure Git with your credentials
-- Set up SSH key for GitHub
-- Create necessary directory structure
-- Authenticate with GitHub
-- Initialize Git repository and submodules
+The frontend is built with Next.js and TypeScript. To start development:
 
 ```bash
-cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Development
-chmod +x Scripts/initial_setup.sh  # Make the script executable
-./Scripts/initial_setup.sh
+cd src/frontend
+npm install
+npm run dev
 ```
 
-**Note**: During this step, you'll be prompted to:
+Key frontend features:
 
-1. Add your SSH key to GitHub (if not already done)
-2. Authenticate with GitHub CLI (will use your PAT if configured)
-3. Review and confirm software installations
+- Next.js 14 with App Router
+- TypeScript for type safety
+- Tailwind CSS for styling
+- React Query for data fetching
+- Zustand for state management
+- Jest and React Testing Library for testing
 
-### Step 5: Open Workspace in Cursor
+### Backend Development
 
-After the initial setup is complete, run the workspace setup script to:
-
-- Ensure all directories are properly created
-- Initialize and update Git submodules
-- Open the workspace in Cursor
+The backend is built with Express.js and TypeScript. To start development:
 
 ```bash
-chmod +x Scripts/setup_workspace.sh  # Make the script executable
-./Scripts/setup_workspace.sh
+cd src/backend
+npm install
+npm run dev
 ```
 
-## Directory Structure
+Key backend features:
 
-- `GitHub/` - Contains GitHub repositories as Git submodules
-  - `cve_config_generation/` - CVE configuration generation project
-  - `palo_alto_poc/` - Palo Alto POC project
-  - `.env` - GitHub API token configuration
-- `Scripts/` - Setup and utility scripts
-  - `initial_setup.sh` - One-time setup script for new installations
-  - `setup_workspace.sh` - Script to open workspace in Cursor
-- `Configs/` - Configuration files
-- `Workspaces/` - Cursor workspace settings
+- Express.js with TypeScript
+- PostgreSQL with TypeORM
+- Redis for caching
+- JWT authentication
+- Rate limiting
+- Request validation
+- Swagger documentation
 
-## Maintenance
+### Testing
 
-### Updating Projects
-
-To update all submodules to their latest versions:
+Run tests across the project:
 
 ```bash
-git submodule update --remote --merge
+# Frontend tests
+cd src/frontend
+npm test
+
+# Backend tests
+cd src/backend
+npm test
+
+# All tests (using Make)
+make test
 ```
 
-### Adding New Projects
+### Documentation
 
-To add a new project as a submodule:
+The project uses Docsify for documentation. To serve the documentation locally:
 
 ```bash
-git submodule add <repository-url> GitHub/<project-name>
-git commit -m "Add new project: <project-name>"
+cd docs
+docsify serve
 ```
 
-### Troubleshooting
+## Deployment
 
-If you encounter issues:
+### Production Deployment
 
-1. Ensure all prerequisites are met
-2. Check that iCloud Drive is properly synced
-3. Verify GitHub authentication is working
-4. Try running `git submodule update --init --recursive` to reinitialize submodules
-5. Verify your GitHub token is valid and has the correct permissions
+1. Build the applications:
 
-## Requirements
+   ```bash
+   # Frontend build
+   cd src/frontend
+   npm run build
 
-- macOS
-- iCloud Drive enabled
-- Apple ID configured
-- Terminal access
-- GitHub account with SSH key access
-- GitHub Personal Access Token with `repo` and `workflow` scopes
-- Internet connection for software installation
+   # Backend build
+   cd src/backend
+   npm run build
+   ```
+
+2. Deploy using Docker:
+
+   ```bash
+   cd docker
+   docker-compose -f docker-compose.prod.yml up -d
+   ```
+
+### Environment Variables
+
+Required environment variables:
+
+```env
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=security_config
+DB_USER=postgres
+DB_PASSWORD=your_password
+
+# Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# JWT
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=24h
+
+# API
+API_PORT=3001
+API_PREFIX=/api/v1
+
+# Frontend
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Guidelines
+
+- Follow the [TypeScript Style Guide](docs/development/guidelines.md#typescript)
+- Write tests for new features
+- Update documentation as needed
+- Follow the Git commit message convention
+- Ensure all CI checks pass
+
+### Code Review Process
+
+1. Automated checks:
+
+   - Linting
+   - Type checking
+   - Unit tests
+   - Integration tests
+   - Security scanning
+
+2. Manual review:
+   - Code quality
+   - Architecture alignment
+   - Security considerations
+   - Performance impact
+   - Documentation updates
+
+## Security
+
+- All API endpoints require authentication
+- Rate limiting is enforced
+- Input validation on all endpoints
+- Regular security audits
+- Dependency vulnerability scanning
+- Secure configuration management
+
+## Support
+
+- [Documentation](https://robbedell.github.io/security-config-platform)
+- [Issue Tracker](https://github.com/robbedell/security-config-platform/issues)
+- [Discussions](https://github.com/robbedell/security-config-platform/discussions)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- CVE data provided by [NVD](https://nvd.nist.gov/)
+- Configuration templates based on vendor documentation
+- Security best practices from industry standards

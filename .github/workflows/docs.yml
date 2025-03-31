@@ -1,0 +1,59 @@
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**/*.md"
+      - "src/**/*.md"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "docs/**/*.md"
+      - "src/**/*.md"
+      - ".github/workflows/docs.yml"
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: |
+          npm install -g docsify-cli
+
+      - name: Generate Documentation
+        run: |
+          docsify init docs
+          docsify serve docs
+
+      - name: Deploy Documentation
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          destination_dir: docs
+          commit_message: ${{ github.event.head_commit.message }}
+
+      - name: Validate Links
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: "yes"
+          use-verbose-mode: "yes"
+          folder-path: "./docs"
+
+      - name: Check Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v9
+        with:
+          globs: |
+            docs/**/*.md
+            src/**/*.md

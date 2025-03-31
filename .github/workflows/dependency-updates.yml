@@ -1,0 +1,72 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    - cron: "0 0 * * 0" # Run weekly on Sunday
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: |
+          cd src/frontend && npm ci
+          cd ../backend && npm ci
+
+      - name: Update Frontend Dependencies
+        run: |
+          cd src/frontend
+          npx npm-check-updates -u
+          npm install
+
+      - name: Update Backend Dependencies
+        run: |
+          cd src/backend
+          npx npm-check-updates -u
+          npm install
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "chore: update dependencies"
+          title: "chore: update dependencies"
+          body: |
+            Automated dependency updates.
+
+            This PR updates dependencies to their latest versions.
+
+            Please review the changes and ensure they don't break any functionality.
+
+            ### Changes
+            - Frontend dependencies updated
+            - Backend dependencies updated
+
+            ### Testing Required
+            - [ ] Run frontend tests
+            - [ ] Run backend tests
+            - [ ] Test in development environment
+            - [ ] Check for breaking changes
+
+      - name: Label PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            if (pr) {
+              github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: ['dependencies', 'automated']
+              });
+            }

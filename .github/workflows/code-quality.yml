@@ -1,0 +1,73 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: |
+          cd src/frontend && npm ci
+          cd ../backend && npm ci
+
+      - name: Frontend Lint
+        run: |
+          cd src/frontend
+          npm run lint
+
+      - name: Backend Lint
+        run: |
+          cd src/backend
+          npm run lint
+
+      - name: Type Check
+        run: |
+          cd src/frontend && npm run type-check
+          cd ../backend && npm run type-check
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: |
+          cd src/frontend && npm ci
+          cd ../backend && npm ci
+
+      - name: Run Snyk Security Scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+
+      - name: Run OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "Security Config Platform"
+          path: "."
+          format: "HTML"
+          out: "reports"
+          args: >
+            --suppression ./.dependency-check/suppressions.xml
+            --failOnCVSS 7
