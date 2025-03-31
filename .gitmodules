@@ -4,3 +4,6 @@
 [submodule "GitHub/palo_alto_poc"]
 	path = GitHub/palo_alto_poc
 	url = https://github.com/robbedell/palo_alto_poc.git
+[submodule "GitHub/security-config-platform"]
+	path = GitHub/security-config-platform
+	url = https://github.com/robbedell/security-config-platform.git
