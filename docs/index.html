@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Configuration Platform - Documentation</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.css">
+  <style>
+    :root {
+      --theme-color: #4CAF50;
+      --sidebar-width: 300px;
+      --content-width: 900px;
+    }
+
+    /* Dark mode styles */
+    .dark-mode {
+      --bg-color: #1a1a1a;
+      --text-color: #ffffff;
+      --sidebar-bg: #2d2d2d;
+      --border-color: #404040;
+    }
+
+    .dark-mode .sidebar {
+      background-color: var(--sidebar-bg);
+    }
+
+    .dark-mode .content {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    /* Modern UI elements */
+    .app-nav {
+      background: linear-gradient(135deg, var(--theme-color), #2196F3);
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, #f8f9fa, #ffffff);
+    }
+
+    .dark-mode .sidebar {
+      background: linear-gradient(180deg, #2d2d2d, #1a1a1a);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .dark-mode ::-webkit-scrollbar-track {
+      background: #2d2d2d;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--theme-color);
+      border-radius: 4px;
+    }
+
+    /* Code blocks */
+    pre {
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Cards */
+    .card {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .dark-mode .card {
+      background: #2d2d2d;
+    }
+
+    /* Buttons */
+    .button {
+      display: inline-block;
+      padding: 8px 16px;
+      background: var(--theme-color);
+      color: white;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Diagrams */
+    .mermaid {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .dark-mode .mermaid {
+      background: #2d2d2d;
+    }
+
+    /* API Playground */
+    .api-playground {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .dark-mode .api-playground {
+      background: #2d2d2d;
+    }
+
+    /* Feature highlights */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .feature-card {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .dark-mode .feature-card {
+      background: #2d2d2d;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Progress indicators */
+    .progress-bar {
+      height: 4px;
+      background: linear-gradient(90deg, var(--theme-color), #2196F3);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="progress-bar"></div>
+    <nav class="app-nav">
+      <a href="/" class="logo">Security Configuration Platform</a>
+      <div class="nav-buttons">
+        <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+        <a href="https://github.com/robbedell/security-config-platform" class="github-link">GitHub</a>
+      </div>
+    </nav>
+    <div class="sidebar">
+      <div class="sidebar-nav">
+        <ul>
+          <li><a href="#/">Home</a></li>
+          <li><a href="#/getting-started">Getting Started</a></li>
+          <li><a href="#/architecture">Architecture</a></li>
+          <li><a href="#/development">Development</a></li>
+          <li><a href="#/deployment">Deployment</a></li>
+          <li><a href="#/api">API Reference</a></li>
+          <li><a href="#/examples">Examples</a></li>
+          <li><a href="#/troubleshooting">Troubleshooting</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+      <div id="main"></div>
+    </div>
+  </div>
+
+  <script>
+    window.$docsify = {
+      name: 'Security Configuration Platform',
+      repo: 'robbedell/security-config-platform',
+      loadSidebar: true,
+      loadNavbar: true,
+      subMaxLevel: 3,
+      auto2top: true,
+      search: {
+        maxAge: 86400000,
+        paths: 'auto',
+        placeholder: 'Search...',
+        noData: 'No results found!',
+        depth: 6
+      },
+      count:{
+        countable: true,
+        position: 'top',
+        margin: '10px',
+        float: 'right',
+        fontsize: '0.9em',
+        color: 'rgb(90,90,90)'
+      },
+      pagination: {
+        previousText: 'Previous',
+        nextText: 'Next',
+        crossChapter: true,
+        crossChapterText: true,
+      },
+      plugins: [
+        function(hook, vm) {
+          hook.beforeEach(function(html) {
+            return html + '\n\n---\n\n' +
+              'Last updated: {{lastUpdated}}\n\n' +
+              '> Built with ❤️ by [Robert Bedell](https://github.com/robbedell)';
+          });
+        }
+      ]
+    };
+  </script>
+
+  <!-- Scripts -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-javascript.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-typescript.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-docker.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-count/dist/countable.js"></script>
+
+  <script>
+    // Theme toggle
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    }
+
+    // Check for saved theme preference
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
+
+    // Initialize mermaid
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('dark-mode') ? 'dark' : 'default'
+    });
+
+    // Progress bar
+    window.addEventListener('scroll', function() {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.querySelector('.progress-bar').style.width = scrolled + '%';
+    });
+  </script>
+</body>
+</html>
