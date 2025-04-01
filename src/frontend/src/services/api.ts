@@ -269,6 +269,15 @@ export const createTemplate = async (template: Partial<Template>): Promise<Templ
   return response.data;
 };
 
+export const updateTemplate = async (id: string, template: Partial<Template>): Promise<Template> => {
+  const response = await api.put(`/api/templates/${id}`, template);
+  return response.data;
+};
+
+export const deleteTemplate = async (id: string): Promise<void> => {
+  await api.delete(`/api/templates/${id}`);
+};
+
 // Compliance
 export const getComplianceStatus = async (): Promise<ComplianceStatus> => {
   const response = await api.get('/compliance/status');
