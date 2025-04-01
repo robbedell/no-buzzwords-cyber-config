@@ -15,9 +15,26 @@ export default function SecurityConfigsPage() {
     const fetchConfigs = async () => {
       try {
         const data = await getSecurityConfigs();
-        setConfigs(data);
+        // Transform the data to match our frontend interface
+        const transformedData = data.map((config: any) => ({
+          id: config._id,
+          name: config.name,
+          description: config.description,
+          cloudProvider: config.cloudProvider,
+          securityService: config.securityService,
+          region: config.region,
+          status: config.status,
+          networkZones: config.networkZones,
+          threatPrevention: config.threatPrevention,
+          logging: config.logging,
+          compliance: config.compliance,
+          deploymentHistory: config.deploymentHistory,
+          lastUpdated: config.lastUpdated
+        }));
+        setConfigs(transformedData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error('Error fetching configs:', err);
+        setError(err instanceof Error ? err.message : 'An error occurred while fetching security configurations');
       } finally {
         setLoading(false);
       }
@@ -81,18 +98,24 @@ export default function SecurityConfigsPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Network Zones:</span>
-                  <span className="font-medium">{config.networkZones.length}</span>
+                  <span className="font-medium">{config.networkZones?.length || 0}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Threat Prevention:</span>
-                  <span className={`font-medium ${config.threatPrevention.vulnerabilityProtection ? 'text-green-600' : 'text-red-600'}`}>
-                    {config.threatPrevention.vulnerabilityProtection ? 'Active' : 'Inactive'}
+                  <span className={`font-medium ${config.threatPrevention?.vulnerabilityProtection ? 'text-green-600' : 'text-red-600'}`}>
+                    {config.threatPrevention?.vulnerabilityProtection ? 'Active' : 'Inactive'}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Logging:</span>
-                  <span className={`font-medium ${config.logging.trafficLogs ? 'text-green-600' : 'text-red-600'}`}>
-                    {config.logging.trafficLogs ? 'Active' : 'Inactive'}
+                  <span className={`font-medium ${config.logging?.trafficLogs ? 'text-green-600' : 'text-red-600'}`}>
+                    {config.logging?.trafficLogs ? 'Active' : 'Inactive'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Compliance:</span>
+                  <span className={`font-medium ${config.compliance?.status === 'compliant' ? 'text-green-600' : 'text-red-600'}`}>
+                    {config.compliance?.status || 'Unknown'}
                   </span>
                 </div>
               </div>
