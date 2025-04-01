@@ -2,5 +2,10 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js"
+  "/security": "pages/security.js",
+  "/compliance": "pages/compliance.js",
+  "/security/configs": "pages/security/configs.js",
+  "/": "pages/index.js",
+  "/templates": "pages/templates.js",
+  "/templates/[id]": "pages/templates/[id].js"
 }

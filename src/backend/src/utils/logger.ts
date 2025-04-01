@@ -1,16 +1,15 @@
 import winston from 'winston';
-import { config } from '../config';
+import path from 'path';
 
 const { format, createLogger, transports } = winston;
-
 const { combine, timestamp, printf, colorize } = format;
 
 const myFormat = printf(({ level, message, timestamp }) => {
-  return `${timestamp} ${level}: ${message}`;
+  return `${timestamp} [${level}]: ${message}`;
 });
 
 export const logger = createLogger({
-  level: config.nodeEnv === 'production' ? 'info' : 'debug',
+  level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
   format: combine(
     timestamp(),
     colorize(),
@@ -18,13 +17,18 @@ export const logger = createLogger({
   ),
   transports: [
     new transports.Console(),
-    new transports.File({ filename: 'error.log', level: 'error' }),
-    new transports.File({ filename: 'combined.log' })
+    new transports.File({
+      filename: path.join(__dirname, '../../logs/error.log'),
+      level: 'error'
+    }),
+    new transports.File({
+      filename: path.join(__dirname, '../../logs/combined.log')
+    })
   ]
 });
 
 // If we're not in production, log to the console with colors
-if (config.nodeEnv !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   logger.add(new transports.Console({
     format: combine(
       colorize(),
