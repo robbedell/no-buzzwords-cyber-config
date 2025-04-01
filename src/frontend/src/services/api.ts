@@ -19,8 +19,8 @@ import {
 
 const api = axios.create({
   baseURL: typeof window !== 'undefined'
-    ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api')
-    : (process.env.NEXT_PUBLIC_SERVER_API_URL || 'http://backend:3001/api'),
+    ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001')
+    : (process.env.NEXT_PUBLIC_SERVER_API_URL || 'http://backend:3001'),
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -55,31 +55,31 @@ export interface Template {
 
 // Security Configurations
 export const getSecurityConfigs = async (): Promise<SecurityConfig[]> => {
-  const response = await api.get('/security/configs');
+  const response = await api.get('/api/security/configs');
   return response.data;
 };
 
 export const getSecurityConfig = async (id: string): Promise<SecurityConfig> => {
-  const response = await api.get(`/security/configs/${id}`);
+  const response = await api.get(`/api/security/configs/${id}`);
   return response.data;
 };
 
 export const createSecurityConfig = async (config: Partial<SecurityConfig>): Promise<SecurityConfig> => {
-  const response = await api.post('/security/configs', config);
+  const response = await api.post('/api/security/configs', config);
   return response.data;
 };
 
 export const updateSecurityConfig = async (id: string, config: Partial<SecurityConfig>): Promise<SecurityConfig> => {
-  const response = await api.put(`/security/configs/${id}`, config);
+  const response = await api.put(`/api/security/configs/${id}`, config);
   return response.data;
 };
 
 export const deleteSecurityConfig = async (id: string): Promise<void> => {
-  await api.delete(`/security/configs/${id}`);
+  await api.delete(`/api/security/configs/${id}`);
 };
 
 export const validateSecurityConfig = async (id: string): Promise<SecurityValidation> => {
-  const response = await api.post(`/security/configs/${id}/validate`);
+  const response = await api.post(`/api/security/configs/${id}/validate`);
   return response.data;
 };
 
@@ -87,7 +87,7 @@ export const deploySecurityConfig = async (id: string): Promise<{
   status: DeploymentStatus;
   message: string;
 }> => {
-  const response = await api.post(`/security/configs/${id}/deploy`);
+  const response = await api.post(`/api/security/configs/${id}/deploy`);
   return response.data;
 };
 
@@ -95,7 +95,7 @@ export const rollbackSecurityConfig = async (id: string, version: string): Promi
   status: DeploymentStatus;
   message: string;
 }> => {
-  const response = await api.post(`/security/configs/${id}/rollback`, { version });
+  const response = await api.post(`/api/security/configs/${id}/rollback`, { version });
   return response.data;
 };
 

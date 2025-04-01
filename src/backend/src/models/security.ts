@@ -155,4 +155,4 @@ securityConfigSchema.pre('save', function(next) {
   next();
 });
 
-export const SecurityConfig = mongoose.model('SecurityConfig', securityConfigSchema); 
+export const SecurityConfig = mongoose.model('SecurityConfig', securityConfigSchema, 'securityconfigs'); 
