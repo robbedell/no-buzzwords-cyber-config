@@ -4,6 +4,7 @@ import dashboardRoutes from './dashboard';
 import healthRoutes from './health';
 import complianceRoutes from './compliance';
 import securityRoutes from './security';
+import templatesRouter from './templates';
 
 const router = express.Router();
 
@@ -21,5 +22,8 @@ router.use('/dashboard', dashboardRoutes);
 
 // Compliance
 router.use('/compliance', complianceRoutes);
+
+// Templates
+router.use('/templates', templatesRouter);
 
 export default router; 

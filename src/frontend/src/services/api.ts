@@ -255,11 +255,18 @@ export const exportConfigTemplate = async (id: string, variables: Record<string,
 };
 
 export const getTemplates = async (): Promise<Template[]> => {
-  const response = await fetch('/api/templates');
-  if (!response.ok) {
-    throw new Error('Failed to fetch templates');
-  }
-  return response.json();
+  const response = await api.get('/api/templates');
+  return response.data;
+};
+
+export const getTemplate = async (id: string): Promise<Template> => {
+  const response = await api.get(`/api/templates/${id}`);
+  return response.data;
+};
+
+export const createTemplate = async (template: Partial<Template>): Promise<Template> => {
+  const response = await api.post('/api/templates', template);
+  return response.data;
 };
 
 // Compliance
