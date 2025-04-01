@@ -22,52 +22,41 @@ A unified platform for security configuration management and CVE-based configura
 - **Audit Logging**: Comprehensive audit trail for all changes
 - **Compliance Checking**: Automated compliance validation against security standards
 - **Configuration Templates**: Pre-built templates for common security configurations
+- **Network Zone Management**: Define and manage security zones with different security levels
+- **Threat Prevention**: Configure and manage threat prevention features
+- **Logging Configuration**: Customize logging settings for different security aspects
 
 ## Project Structure
 
 ```
 security-config-platform/
-├── config/                    # Configuration files
-│   ├── development/          # Development environment configs
-│   └── production/           # Production environment configs
-├── docker/                   # Docker-related files
-│   ├── backend/             # Backend Docker configuration
-│   ├── frontend/            # Frontend Docker configuration
-│   └── docker-compose.yml   # Main Docker Compose file
-├── docs/                     # Documentation
-│   ├── architecture/        # Architecture documentation
-│   │   ├── README.md       # Architecture overview
-│   │   ├── frontend.md     # Frontend architecture
-│   │   ├── backend.md      # Backend architecture
-│   │   └── security.md     # Security architecture
-│   ├── api/                # API documentation
-│   │   ├── README.md      # API overview
-│   │   └── endpoints.md   # API endpoints
-│   └── development/       # Development guides
-│       ├── README.md     # Development overview
-│       ├── setup.md      # Setup guide
-│       └── guidelines.md # Development guidelines
 ├── src/                      # Source code
-│   ├── backend/            # Backend application
-│   │   ├── package.json
-│   │   └── src/
-│   │       ├── controllers/
-│   │       ├── models/
-│   │       ├── routes/
-│   │       ├── services/
-│   │       └── utils/
-│   └── frontend/           # Frontend application
-│       ├── package.json
-│       └── src/
-│           ├── components/
-│           ├── pages/
-│           ├── styles/
-│           └── utils/
-├── .github/                 # GitHub configuration
-│   ├── ISSUE_TEMPLATE/     # Issue templates
-│   ├── projects/           # Project board configuration
-│   ├── workflows/          # GitHub Actions workflows
-│   └── PULL_REQUEST_TEMPLATE.md
+│   ├── frontend/            # Frontend application
+│   │   ├── src/
+│   │   │   ├── components/  # Reusable UI components
+│   │   │   ├── pages/      # Next.js pages
+│   │   │   ├── services/   # API services
+│   │   │   ├── types/      # TypeScript type definitions
+│   │   │   └── utils/      # Utility functions
+│   │   └── package.json
+│   └── backend/            # Backend application
+│       ├── src/
+│       │   ├── controllers/
+│       │   ├── models/
+│       │   ├── routes/
+│       │   ├── services/
+│       │   └── utils/
+│       └── package.json
+├── docker/                  # Docker configuration
+│   ├── frontend/           # Frontend Dockerfile
+│   ├── backend/            # Backend Dockerfile
+│   └── docker-compose.yml  # Docker Compose configuration
+├── docs/                   # Documentation
+│   ├── api/               # API documentation
+│   ├── architecture/      # Architecture documentation
+│   ├── deployment/       # Deployment guides
+│   └── development/      # Development guides
+├── .github/              # GitHub configuration
 ├── .gitignore
 ├── LICENSE
 └── README.md
@@ -94,7 +83,7 @@ Visit our [Project Board](https://github.com/robbedell/security-config-platform/
 
 - Node.js 18.x or later
 - Docker and Docker Compose
-- PostgreSQL 15.x
+- MongoDB 6.x
 - Redis 7.x
 - Git
 - Make (optional, for using Makefile commands)
@@ -108,26 +97,17 @@ Visit our [Project Board](https://github.com/robbedell/security-config-platform/
    cd security-config-platform
    ```
 
-2. Set up environment variables:
-
-   ```bash
-   # Copy example environment files
-   cp config/development/.env.example config/development/.env
-   cp config/production/.env.example config/production/.env
-   ```
-
-3. Start the development environment:
+2. Start the development environment:
 
    ```bash
    # Using Docker Compose
-   cd docker
-   docker-compose up -d
+   docker compose up -d
 
    # Or using Make (if available)
    make dev-up
    ```
 
-4. Access the application:
+3. Access the application:
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:3001
    - API Documentation: http://localhost:3001/api-docs
@@ -137,15 +117,7 @@ Visit our [Project Board](https://github.com/robbedell/security-config-platform/
 
 ### Frontend Development
 
-The frontend is built with Next.js and TypeScript. To start development:
-
-```bash
-cd src/frontend
-npm install
-npm run dev
-```
-
-Key frontend features:
+The frontend is built with Next.js and TypeScript. Key features:
 
 - Next.js 14 with App Router
 - TypeScript for type safety
@@ -156,18 +128,10 @@ Key frontend features:
 
 ### Backend Development
 
-The backend is built with Express.js and TypeScript. To start development:
-
-```bash
-cd src/backend
-npm install
-npm run dev
-```
-
-Key backend features:
+The backend is built with Express.js and TypeScript. Key features:
 
 - Express.js with TypeScript
-- PostgreSQL with TypeORM
+- MongoDB with Mongoose
 - Redis for caching
 - JWT authentication
 - Rate limiting
@@ -219,8 +183,7 @@ docsify serve
 2. Deploy using Docker:
 
    ```bash
-   cd docker
-   docker-compose -f docker-compose.prod.yml up -d
+   docker compose -f docker-compose.prod.yml up -d
    ```
 
 ### Environment Variables
@@ -229,15 +192,8 @@ Required environment variables:
 
 ```env
 # Database
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=security_config
-DB_USER=postgres
-DB_PASSWORD=your_password
-
-# Redis
-REDIS_HOST=localhost
-REDIS_PORT=6379
+MONGODB_URI=mongodb://localhost:27017/security_config
+REDIS_URL=redis://localhost:6379
 
 # JWT
 JWT_SECRET=your_jwt_secret
@@ -253,51 +209,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Guidelines
-
-- Follow the [TypeScript Style Guide](docs/development/guidelines.md#typescript)
-- Write tests for new features
-- Update documentation as needed
-- Follow the Git commit message convention
-- Ensure all CI checks pass
-
-### Code Review Process
-
-1. Automated checks:
-
-   - Linting
-   - Type checking
-   - Unit tests
-   - Integration tests
-   - Security scanning
-
-2. Manual review:
-   - Code quality
-   - Architecture alignment
-   - Security considerations
-   - Performance impact
-   - Documentation updates
-
-## Security
-
-- All API endpoints require authentication
-- Rate limiting is enforced
-- Input validation on all endpoints
-- Regular security audits
-- Dependency vulnerability scanning
-- Secure configuration management
-
-## Support
-
-- [Documentation](https://robbedell.github.io/security-config-platform)
-- [Issue Tracker](https://github.com/robbedell/security-config-platform/issues)
-- [Discussions](https://github.com/robbedell/security-config-platform/discussions)
+Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## License
 

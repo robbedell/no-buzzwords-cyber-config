@@ -1,4 +1,4 @@
-# Security Configuration Platform
+# Security Configuration Platform Documentation
 
 <div class="feature-grid">
   <div class="feature-card">
@@ -29,28 +29,33 @@ The Security Configuration Platform is a comprehensive solution for managing and
 
 ### Key Features
 
-- 🔒 **Secure Configuration Management**
-
+- 🔒 **Security Configuration Management**
   - Centralized security policy management
-  - Automated compliance checks
-  - Real-time monitoring and alerts
+  - Network zone configuration
+  - Threat prevention settings
+  - Logging configuration
+  - Compliance monitoring
 
 - 🚀 **Easy Integration**
-
   - RESTful API
-  - Webhook support
+  - WebSocket support
   - Docker containerization
+  - MongoDB data persistence
+  - Redis caching
 
 - 📊 **Advanced Analytics**
-
   - Security posture assessment
   - Compliance reporting
   - Trend analysis
+  - Real-time monitoring
+  - Audit logging
 
 - 🔄 **Automation**
   - Automated policy enforcement
   - Scheduled scans
   - Custom workflows
+  - CVE data integration
+  - Configuration validation
 
 ## Quick Start
 
@@ -61,32 +66,35 @@ The Security Configuration Platform is a comprehensive solution for managing and
    cd security-config-platform
    ```
 
-2. **Set Up Development Environment**
+2. **Start Development Environment**
 
    ```bash
-   # Install dependencies
-   npm install
+   # Start all services
+   docker compose up -d
 
-   # Start development servers
-   npm run dev
+   # Check service status
+   docker compose ps
    ```
 
 3. **Access the Platform**
    - Frontend: http://localhost:3000
-   - Backend API: http://localhost:4000
-   - Documentation: http://localhost:3001
+   - Backend API: http://localhost:3001
+   - Documentation: http://localhost:3000/docs
 
 ## System Architecture
 
 ```mermaid
 graph TD
     A[Frontend] --> B[Backend API]
-    B --> C[Database]
+    B --> C[MongoDB]
     B --> D[Redis Cache]
     B --> E[Security Scanner]
     E --> F[CVE Database]
     B --> G[Policy Engine]
     G --> H[Compliance Rules]
+    B --> I[Network Zone Manager]
+    B --> J[Threat Prevention]
+    B --> K[Logging System]
 ```
 
 ## Getting Help

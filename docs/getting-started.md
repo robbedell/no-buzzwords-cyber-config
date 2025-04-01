@@ -9,7 +9,7 @@ Before you begin, ensure you have the following installed:
 - Node.js (v18 or later)
 - Docker and Docker Compose
 - Git
-- PostgreSQL (v14 or later)
+- MongoDB (v6 or later)
 - Redis (v7 or later)
 
 ## Development Environment Setup
@@ -21,149 +21,105 @@ git clone https://github.com/robbedell/security-config-platform.git
 cd security-config-platform
 ```
 
-### 2. Install Dependencies
+### 2. Start Development Environment
+
+The easiest way to get started is using Docker Compose:
 
 ```bash
-# Install frontend dependencies
-cd src/frontend
-npm install
+# Start all services
+docker compose up -d
 
-# Install backend dependencies
-cd ../backend
-npm install
+# Check service status
+docker compose ps
 ```
 
-### 3. Environment Configuration
+This will start:
+- Frontend application (http://localhost:3000)
+- Backend API (http://localhost:3001)
+- MongoDB database
+- Redis cache
 
-Create the following environment files:
+### 3. Access the Application
 
-#### Frontend (.env.local)
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:4000
-NEXT_PUBLIC_WS_URL=ws://localhost:4000
-```
-
-#### Backend (.env)
-
-```env
-NODE_ENV=development
-PORT=4000
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/security_config
-REDIS_URL=redis://localhost:6379
-JWT_SECRET=your-development-secret-key
-CORS_ORIGIN=http://localhost:3000
-```
-
-### 4. Database Setup
-
-```bash
-# Start PostgreSQL and Redis using Docker Compose
-cd ../../docker
-docker-compose up -d db redis
-
-# Run database migrations
-cd ../src/backend
-npm run migrate
-```
-
-### 5. Start Development Servers
-
-```bash
-# Start frontend (in one terminal)
-cd src/frontend
-npm run dev
-
-# Start backend (in another terminal)
-cd src/backend
-npm run dev
-```
-
-## Docker Development
-
-Alternatively, you can use Docker for development:
-
-```bash
-# Build and start all services
-docker-compose up --build
-
-# Stop all services
-docker-compose down
-```
-
-## Project Structure
-
-```
-security-config-platform/
-├── src/
-│   ├── frontend/          # Next.js frontend application
-│   └── backend/           # Node.js backend application
-├── docker/                # Docker configuration files
-├── config/               # Configuration files
-├── docs/                 # Documentation
-└── .github/              # GitHub Actions workflows
-```
+Once the services are running, you can access:
+- Frontend UI: http://localhost:3000
+- Backend API: http://localhost:3001
+- API Documentation: http://localhost:3001/api-docs
+- Documentation Site: http://localhost:3000/docs
 
 ## Development Workflow
 
-1. **Branch Management**
+### Frontend Development
 
-   ```bash
-   # Create a new feature branch
-   git checkout -b feature/your-feature-name
+The frontend is built with Next.js and includes:
 
-   # Create a new bugfix branch
-   git checkout -b fix/your-bugfix-name
-   ```
+- Modern UI components with Tailwind CSS
+- Type-safe API integration
+- Real-time updates via WebSocket
+- Comprehensive form handling
+- Responsive design
 
-2. **Code Style**
+Key features:
+- Security configuration management
+- Network zone configuration
+- Threat prevention settings
+- Logging configuration
+- Compliance monitoring
 
-   - Frontend: ESLint + Prettier
-   - Backend: ESLint + Prettier
-   - Run linting: `npm run lint`
-   - Format code: `npm run format`
+### Backend Development
 
-3. **Testing**
+The backend provides:
 
-   ```bash
-   # Run frontend tests
-   cd src/frontend
-   npm test
+- RESTful API endpoints
+- MongoDB data persistence
+- Redis caching
+- JWT authentication
+- Rate limiting
+- Input validation
 
-   # Run backend tests
-   cd src/backend
-   npm test
-   ```
+Key features:
+- Security configuration CRUD
+- CVE data integration
+- Compliance validation
+- Audit logging
+- User management
 
-4. **Building**
+### Testing
 
-   ```bash
-   # Build frontend
-   cd src/frontend
-   npm run build
+Run tests across the project:
 
-   # Build backend
-   cd src/backend
-   npm run build
-   ```
+```bash
+# Frontend tests
+cd src/frontend
+npm test
+
+# Backend tests
+cd src/backend
+npm test
+
+# All tests (using Make)
+make test
+```
 
 ## Common Issues and Solutions
 
 ### Database Connection Issues
 
-If you're having trouble connecting to the database:
+If you're having trouble connecting to MongoDB:
 
-1. Check if PostgreSQL is running:
-
+1. Check if MongoDB is running:
    ```bash
-   docker ps | grep postgres
+   docker compose ps db
    ```
 
-2. Verify database credentials in `.env`
-
-3. Try connecting directly:
+2. Verify MongoDB connection string:
    ```bash
-   psql -h localhost -U postgres -d security_config
+   docker compose exec db mongosh
+   ```
+
+3. Check logs for errors:
+   ```bash
+   docker compose logs db
    ```
 
 ### Redis Connection Issues
@@ -171,16 +127,18 @@ If you're having trouble connecting to the database:
 If Redis isn't connecting:
 
 1. Check if Redis is running:
-
    ```bash
-   docker ps | grep redis
+   docker compose ps redis
    ```
 
-2. Verify Redis URL in `.env`
-
-3. Test Redis connection:
+2. Verify Redis connection:
    ```bash
-   redis-cli ping
+   docker compose exec redis redis-cli ping
+   ```
+
+3. Check logs for errors:
+   ```bash
+   docker compose logs redis
    ```
 
 ### Frontend Build Issues
@@ -188,21 +146,18 @@ If Redis isn't connecting:
 If the frontend build fails:
 
 1. Clear Next.js cache:
-
    ```bash
-   rm -rf .next
+   docker compose exec frontend rm -rf .next
    ```
 
-2. Reinstall dependencies:
-
+2. Rebuild the frontend:
    ```bash
-   rm -rf node_modules
-   npm install
+   docker compose restart frontend
    ```
 
 3. Check for TypeScript errors:
    ```bash
-   npm run type-check
+   docker compose exec frontend npm run type-check
    ```
 
 ## Next Steps
