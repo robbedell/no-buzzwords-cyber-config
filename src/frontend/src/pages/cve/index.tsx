@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Layout from '../../components/Layout/Layout';
-import { CVE, searchCVE } from '../../services/api';
+import { searchCVE } from '../../services/api';
+import { CVE } from '../../types';
+
+interface Product {
+  name: string;
+  version: string;
+}
 
 const CVEOverview: React.FC = () => {
   const [cves, setCves] = useState<CVE[]>([]);
@@ -16,11 +21,10 @@ const CVEOverview: React.FC = () => {
   useEffect(() => {
     const fetchCVEs = async () => {
       try {
-        const data = await searchCVE({});
+        const data = await searchCVE({ query: '' });
         setCves(data);
-      } catch (err) {
-        setError('Failed to fetch CVEs');
-        console.error(err);
+      } catch (error) {
+        console.error('Error fetching CVEs:', error);
       } finally {
         setLoading(false);
       }
@@ -53,8 +57,16 @@ const CVEOverview: React.FC = () => {
     }
   };
 
+  const renderProduct = (product: Product, index: number) => {
+    return (
+      <span key={index} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-2 mb-2">
+        {product.name} {product.version}
+      </span>
+    );
+  };
+
   return (
-    <Layout>
+    <>
       <div className="px-6 py-4">
         <div className="flex justify-between items-center mb-6">
           <div>
@@ -62,6 +74,11 @@ const CVEOverview: React.FC = () => {
             <p className="mt-1 text-sm text-gray-500">
               Browse and search Common Vulnerabilities and Exposures
             </p>
+          </div>
+          <div className="flex space-x-4">
+            <button className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              Export Report
+            </button>
           </div>
         </div>
 
@@ -185,7 +202,7 @@ const CVEOverview: React.FC = () => {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

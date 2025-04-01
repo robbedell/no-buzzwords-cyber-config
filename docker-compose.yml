@@ -27,7 +27,7 @@ services:
       - /app/node_modules
     environment:
       - PORT=3001
-      - DATABASE_URL=postgresql://user:password@db:5432/security_config
+      - MONGODB_URI=mongodb://db:27017/security-config
       - REDIS_URL=redis://redis:6379
       - JWT_SECRET=your-secret-key
       - NODE_ENV=development
@@ -36,15 +36,11 @@ services:
       - redis
 
   db:
-    image: postgres:15
+    image: mongo:latest
     ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=security_config
+      - "27017:27017"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mongodb_data:/data/db
 
   redis:
     image: redis:7
@@ -54,5 +50,5 @@ services:
       - redis_data:/data
 
 volumes:
-  postgres_data:
+  mongodb_data:
   redis_data:

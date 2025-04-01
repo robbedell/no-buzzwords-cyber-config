@@ -1,10 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import Layout from '../components/Layout/Layout';
 
 const Home: React.FC = () => {
   return (
-    <Layout>
+    <>
       {/* Hero Section */}
       <div className="bg-white">
         <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
@@ -122,7 +121,7 @@ const Home: React.FC = () => {
           </Link>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 
