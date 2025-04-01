@@ -2,24 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
-
-interface SecurityConfig {
-  id: string;
-  name: string;
-  description: string;
-  cloudProvider: string;
-  securityService: string;
-  region: string;
-  networkZones: string[];
-  threatPrevention: {
-    enabled: boolean;
-    rules: string[];
-  };
-  logging: {
-    enabled: boolean;
-    retentionDays: number;
-  };
-}
+import { getSecurityConfigs } from '@/services/api';
+import type { SecurityConfig } from '@/types';
+import Link from 'next/link';
 
 export default function SecurityConfigsPage() {
   const [configs, setConfigs] = useState<SecurityConfig[]>([]);
@@ -29,11 +14,7 @@ export default function SecurityConfigsPage() {
   useEffect(() => {
     const fetchConfigs = async () => {
       try {
-        const response = await fetch('/api/security/configs');
-        if (!response.ok) {
-          throw new Error('Failed to fetch security configs');
-        }
-        const data = await response.json();
+        const data = await getSecurityConfigs();
         setConfigs(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
@@ -69,12 +50,12 @@ export default function SecurityConfigsPage() {
     <div className="container mx-auto p-4 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Security Configurations</h1>
-        <button
+        <Link
+          href="/security/configs/new"
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-          onClick={() => {/* TODO: Implement create config */}}
         >
           Create New Config
-        </button>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -104,14 +85,14 @@ export default function SecurityConfigsPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Threat Prevention:</span>
-                  <span className={`font-medium ${config.threatPrevention.enabled ? 'text-green-600' : 'text-red-600'}`}>
-                    {config.threatPrevention.enabled ? 'Enabled' : 'Disabled'}
+                  <span className={`font-medium ${config.threatPrevention.vulnerabilityProtection ? 'text-green-600' : 'text-red-600'}`}>
+                    {config.threatPrevention.vulnerabilityProtection ? 'Active' : 'Inactive'}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Logging:</span>
-                  <span className={`font-medium ${config.logging.enabled ? 'text-green-600' : 'text-red-600'}`}>
-                    {config.logging.enabled ? 'Enabled' : 'Disabled'}
+                  <span className={`font-medium ${config.logging.trafficLogs ? 'text-green-600' : 'text-red-600'}`}>
+                    {config.logging.trafficLogs ? 'Active' : 'Inactive'}
                   </span>
                 </div>
               </div>
