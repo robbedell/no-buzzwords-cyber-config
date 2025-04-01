@@ -2,9 +2,14 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Copy npm configuration first
+COPY .npmrc ./
+
+# Copy package files
 COPY package*.json ./
 
-RUN npm install
+# Install dependencies with more permissive settings
+RUN npm install --no-optional --unsafe-perm
 
 COPY . .
 

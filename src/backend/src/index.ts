@@ -21,6 +21,18 @@ app.use((req, _res, next) => {
   next();
 });
 
+// Health check endpoint
+app.get('/health', (_req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    services: {
+      server: 'running',
+      database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+    }
+  });
+});
+
 // Routes
 app.use('/api', routes);
 
